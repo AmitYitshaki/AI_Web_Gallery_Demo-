@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio | ImageForge AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script type="module" src="{{ url_for('static', filename='js/chat.js') }}"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="/dashboard">ImageForge AI</a>
+      <nav class="nav-actions" aria-label="Primary navigation">
+        <a class="btn btn-secondary" href="/dashboard">Gallery</a>
+        <button class="btn btn-ghost" type="button" data-logout>Logout</button>
+      </nav>
+    </header>
+
+    <main class="studio-shell">
+      <section class="studio-panel" aria-label="AI image chat">
+        <div class="studio-panel__header">
+          <div>
+            <p class="eyebrow">Studio</p>
+            <h1>Prompt a New Variation</h1>
+          </div>
+          <div class="selected-file">
+            <img id="selectedImage" alt="Selected upload preview" hidden>
+            <span id="selectedImageName">No image selected</span>
+          </div>
+        </div>
+
+        <section id="chatHistory" class="chat-history" aria-live="polite"></section>
+
+        <div class="composer">
+          <input id="imageUpload" class="visually-hidden" type="file" accept="image/*">
+          <button id="attachButton" class="icon-button icon-button--accent" type="button" aria-label="Attach image">
+            +
+          </button>
+          <textarea
+            id="promptInput"
+            rows="1"
+            placeholder="Make it cyberpunk, painterly, cinematic..."
+            aria-label="Image generation prompt"
+          ></textarea>
+          <button id="sendButton" class="btn btn-primary" type="button">Send</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+firebase_config.json
+.git
+.vscode
+venv
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+.ruff_cache
+static/uploads/*
+!static/uploads/.gitkeep
