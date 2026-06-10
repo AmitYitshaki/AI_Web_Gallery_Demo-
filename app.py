@@ -10,6 +10,7 @@ load_dotenv(dotenv_path=BASE_DIR / ".env")
 import os
 import uuid
 import json
+import logging
 from functools import wraps
 from io import BytesIO
 from typing import Any, Callable
@@ -29,6 +30,9 @@ from services.ai_generator import (
     ImageGenerationError,
     ImageGenerationService,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 UPLOAD_DIR = BASE_DIR / "static" / "uploads"
@@ -84,8 +88,9 @@ def create_app() -> Flask:
 
         try:
             decoded_token = auth.verify_id_token(id_token)
-        except Exception:
-            return jsonify({"error": "Invalid Firebase ID token."}), 401
+        except Exception as error:
+            logger.exception("Firebase ID token verification failed.")
+            return jsonify({"error": f"Invalid Firebase ID token: {error.__class__.__name__}"}), 401
 
         response = jsonify({"uid": decoded_token["uid"]})
         response.set_cookie(

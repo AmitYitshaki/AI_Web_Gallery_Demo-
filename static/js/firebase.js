@@ -90,7 +90,18 @@ export async function createBackendSession(user) {
   });
 
   if (!response.ok) {
-    throw new Error("Could not create backend session.");
+    let message = "Could not create backend session.";
+
+    try {
+      const data = await response.json();
+      if (data.error) {
+        message = data.error;
+      }
+    } catch (_error) {
+      // Keep the generic message if the server did not return JSON.
+    }
+
+    throw new Error(message);
   }
 
   return response.json();
