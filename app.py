@@ -90,7 +90,7 @@ def create_app() -> Flask:
             decoded_token = auth.verify_id_token(id_token)
         except Exception as error:
             logger.exception("Firebase ID token verification failed.")
-            return jsonify({"error": f"Invalid Firebase ID token: {error.__class__.__name__}"}), 401
+            return jsonify({"error": f"Invalid Firebase ID token: {error}"}), 401
 
         response = jsonify({"uid": decoded_token["uid"]})
         response.set_cookie(
@@ -249,6 +249,7 @@ def initialize_firebase() -> None:
 
     service_account_json = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
     service_account_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH", "firebase_config.json")
+    service_account_path_was_configured = bool(os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH"))
 
     if service_account_json:
         try:
@@ -264,6 +265,9 @@ def initialize_firebase() -> None:
         cred = credentials.Certificate(service_account_path)
         firebase_admin.initialize_app(cred)
         return
+
+    if service_account_path_was_configured:
+        raise RuntimeError(f"Firebase service account file was not found at {service_account_path}.")
 
     # Application Default Credentials are useful in deployed Google environments.
     firebase_admin.initialize_app()
